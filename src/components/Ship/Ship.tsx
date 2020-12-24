@@ -1,4 +1,4 @@
-import { MutableRefObject, useEffect, useRef, useState } from "react";
+import React, { ForwardedRef, MutableRefObject, useEffect, useRef, useState } from "react";
 import style from "./style.module.scss";
 
 interface ShipState {
@@ -14,11 +14,13 @@ interface ShipState {
 const TURN_LEFT = -1;
 const TURN_RIGHT = 1;
 const TURN_NEUTRAL = 0;
-const TURN_FACTOR = 2;
 
+const TURN_FACTOR = 2;
 const THRUST_FACTOR = .2;
 
-const Ship = () => {
+const COLLISION_BUMP = .20;
+
+const Ship = React.forwardRef((props, ref: ForwardedRef<HTMLDivElement>) => {
     
     const initial: ShipState = {
         azimut: 0,
@@ -30,33 +32,62 @@ const Ship = () => {
         turn: 0,
     }
 
+    const screenRef = (ref as MutableRefObject<HTMLDivElement>).current;
+
     const [shipState, setShipState] = useState(initial);
     const shipRef: MutableRefObject<null> = useRef(null);
     const animationRef: MutableRefObject<number|undefined> = useRef();
 
     const updatePosition = (): void => {
-        shipState.top += (shipState.vY * -1);
-        shipState.left += shipState.vX;
 
-        if (shipState.thrust) {
-            const degrees = (shipState.azimut % 360) * -1;
-            const radians = degrees * (Math.PI / 180);
-            shipState.vX += parseFloat((Math.cos(radians) * THRUST_FACTOR).toFixed(3));
-            shipState.vY += parseFloat((Math.sin(radians) * THRUST_FACTOR).toFixed(3));
-        }
+        if (screenRef !== null) {
+            shipState.top += (shipState.vY * -1);
+            shipState.left += shipState.vX;
 
-        if (shipState.turn !== 0) {
-            setShipState((previous) => {
-                previous.azimut += previous.turn * TURN_FACTOR;
-                return previous;
-            });
+            if (shipState.thrust) {
+                const degrees = (shipState.azimut % 360) * -1;
+                const radians = degrees * (Math.PI / 180);
+                shipState.vX += parseFloat((Math.cos(radians) * THRUST_FACTOR).toFixed(3));
+                shipState.vY += parseFloat((Math.sin(radians) * THRUST_FACTOR).toFixed(3));
+            }
 
+            if (shipState.turn !== 0) {
+                setShipState((previous) => {
+                    previous.azimut += previous.turn * TURN_FACTOR;
+                    return previous;
+                });
+            }
+
+            checkCollision();
         }
 
         setShipState(previous => ({...shipState}));
         animationRef.current = requestAnimationFrame(updatePosition);
     }
     
+    const checkCollision = () => {
+        if (shipState.left < 0) {
+            shipState.vX = collision(shipState.vX);
+            shipState.left = 0;
+        }
+        if (shipState.left > screenRef.offsetWidth) {
+            shipState.vX = collision(shipState.vX);
+            shipState.left = screenRef.offsetWidth;
+        }
+        if (shipState.top < 0) {
+            shipState.vY = collision(shipState.vY);
+            shipState.top = 0;
+        }
+        if (shipState.top > screenRef.offsetHeight) {
+            shipState.vY = collision(shipState.vY);
+            shipState.top = screenRef.offsetHeight;
+        }
+    }
+
+    const collision = (number: number): number => {
+        return number * -1 * COLLISION_BUMP;
+    }
+
     const engageThruster = (power: boolean): void => {
         if (shipState.thrust !== power) {
             setShipState((previous) => {
@@ -123,7 +154,7 @@ const Ship = () => {
     };
 
     return (
-        <div>
+        <div className={style.shipContainer}>
             <div ref={shipRef} className={style.ship} style={shipStyle}>
                 <div className={style.status}>
                     Azimut: {shipState.azimut}<br/>
@@ -133,6 +164,6 @@ const Ship = () => {
             </div>
         </div>
     )
-}
+});
 
 export default Ship;
