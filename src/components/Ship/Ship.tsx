@@ -18,7 +18,7 @@ const TURN_FACTOR = 2;
 
 const THRUST_FACTOR = .2;
 
-const Ship = (): JSX.Element => {
+const Ship = () => {
     
     const initial: ShipState = {
         azimut: 0,

@@ -1,4 +1,5 @@
 
+import { Ship } from "components/Ship";
 import React from "react";
 import style from "./style.module.scss";
 
@@ -9,7 +10,7 @@ interface Props {
 const Screen = (props: Props): JSX.Element => {
     return (
         <div className={style.screen}>
-            {props.children}
+            <Ship />
         </div>
     )
 }
