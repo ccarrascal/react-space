@@ -12,6 +12,8 @@ interface ShipState {
 const Ship = (): JSX.Element => {
     
     const shipRef: MutableRefObject<null> = useRef(null);
+    const animationRef: MutableRefObject<number|undefined> = useRef();
+
     const initial: ShipState = {
         azimut: 0,
         vY: 0,
@@ -23,62 +25,59 @@ const Ship = (): JSX.Element => {
     const [shipState, setShipState] = useState(initial);
 
 
+    const updatePosition = (): void => {
+        shipState.top += (shipState.vY * -1) / 60;
+        shipState.left += shipState.vX / 60;
+        setShipState(previous => ({...shipState}));
+        animationRef.current = requestAnimationFrame(updatePosition);
+    }
     
 
 
     useEffect(() => {
 
-    const updatePosition = (): void => {
-        shipState.top += (shipState.vY * -1) / 60;
-        shipState.left += shipState.vX / 60;
-        setShipState({...shipState});
-        // console.log("Shipstate position " , shipState);
-        // window.requestAnimationFrame(updatePosition);
-    }
-
         const shipKeyboardControl = (event: KeyboardEvent) => {
 
-            // console.log("Key [" + event.key + " keycode [" + event.keyCode + "]");
             switch (event.key) {
                 case "ArrowRight":
-                    shipState.azimut += 10;
-                    setShipState({...shipState});
+                    setShipState(previous => {
+                        previous.azimut += 10;
+                        return previous;
+                    });
                 break;
 
                 case "ArrowLeft":
-                    shipState.azimut -= 10;
-                    setShipState({...shipState});
+                    setShipState((previous) => {
+                        previous.azimut -= 10;
+                        return previous;
+                    });
+
                 break;
 
                 case "ArrowUp":
-                    const degrees = (shipState.azimut % 360) * -1;
-                    const radians = degrees * (Math.PI / 180);
-                    const x = parseFloat((Math.cos(radians) * 5).toFixed(3));
-                    const y = parseFloat((Math.sin(radians) * 5).toFixed(3));
-                    console.log("degrees ", degrees);
-                    console.log("radians ", radians);
-                    console.log("X ", x);
-                    console.log("Y ", y);
+                    setShipState((previous) => {
+                        const degrees = (previous.azimut % 360) * -1;
+                        const radians = degrees * (Math.PI / 180);
+                        previous.vX += parseFloat((Math.cos(radians) * 5).toFixed(3));
+                        previous.vY += parseFloat((Math.sin(radians) * 5).toFixed(3));
 
-                    shipState.vX += x;
-                    shipState.vY += y;
-                    setShipState({...shipState});
+                        return previous;
+                    });
                 break;
             }
 
-            // shipState.azimut = shipState.azimut % 360;
-            console.log("Shipstate Effect " , shipState);
-
-            updatePosition();
         };
+
+        animationRef.current = requestAnimationFrame(updatePosition);
 
         document.addEventListener("keydown", shipKeyboardControl);
 
         return (): void => {
             // Unbind the event listener on clean up
             document.removeEventListener("keydown", shipKeyboardControl);
+            cancelAnimationFrame(animationRef.current as number);
         };
-    }, [shipState]);
+    });
 
     var shipStyle = {
         transform: "rotate(" + shipState.azimut + "deg)",
