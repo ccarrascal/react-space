@@ -23,7 +23,8 @@ const drawStars = (total: number, canvas: HTMLCanvasElement | null) => {
             }
             const intensity = Math.random() * 255;
             context.fillStyle = "rgb(" + intensity + "," + intensity + "," + intensity + ")";
-            context.fillRect(star.x, star.y, 1, 1);
+            const size = Math.random() > .9? 2: 1;
+            context.fillRect(star.x, star.y, size, size);
         }
     }
 }
