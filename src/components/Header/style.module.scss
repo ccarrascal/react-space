@@ -7,4 +7,9 @@ header {
   padding: 0 30px;
   box-shadow: 0 2px 8px gray;
   top: 0;
+  font-family: "Major Mono Display", monospace;
+
+  .title {
+    font-size: 20px;
+  }
 }
