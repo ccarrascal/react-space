@@ -1,4 +1,23 @@
-# Getting Started with Create React App
+# ASCII SPACE
+
+This is a training project to try and do some cool stuff with react:
+
+- Functional components
+- React Hooks: useEffect, useState, useRef
+- Passing references to children: forwardRef
+- Animations
+- Smooth Keyboard control with multiple key press
+- Google Fonts
+
+Move the spaceship along the screen!
+
+## Controls
+
+    Left: Turn left.
+    Right: Turn right.
+    Up: Thrust!
+
+## Get started
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
