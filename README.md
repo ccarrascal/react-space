@@ -1,4 +1,4 @@
-# ASCII SPACE
+# REACT SPACE
 
 This is a training project to try and do some cool stuff with react:
 
@@ -8,6 +8,7 @@ This is a training project to try and do some cool stuff with react:
 - Animations
 - Smooth Keyboard control with multiple key press
 - Google Fonts
+- Canvas drawing
 
 Move the spaceship along the screen!
 

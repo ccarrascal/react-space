@@ -1,15 +1,51 @@
 import { Ship } from "components/Ship";
-import React from "react";
+import React, { useEffect } from "react";
 import style from "./style.module.scss";
 
 interface Props {
     children: JSX.Element | JSX.Element[];
 }
 
-const Screen = (props: Props): JSX.Element => {
+const drawStars = (total: number, canvas: HTMLCanvasElement | null) => {
+
+    if (!canvas) return;
+
+    const context = canvas && canvas.getContext("2d");
+
+    canvas.width = document.body.clientWidth;
+    canvas.height = document.body.clientHeight;
+
+    if (context) {
+        for (let x=0; x <= total; x++) {
+            const star = {
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+            }
+            const intensity = Math.random() * 255;
+            context.fillStyle = "rgb(" + intensity + "," + intensity + "," + intensity + ")";
+            context.fillRect(star.x, star.y, 1, 1);
+        }
+    }
+}
+
+const Screen = (props: Props) => {
     const ref = React.createRef<HTMLDivElement>();
+    const canvasRef = React.createRef<HTMLCanvasElement>();
+
+    useEffect(() => {
+        const resizeWindow = () => {
+            drawStars(6000, canvasRef.current);
+        }
+
+        resizeWindow();
+        window.addEventListener("resize", resizeWindow);
+        return () => window.removeEventListener("resize", resizeWindow);
+
+    }, [canvasRef]);
+
     return (
-        <div ref={ref} className={style.screen}>
+        <div ref={ref} className={style.screen} id="Screen">
+            <canvas ref={canvasRef} className={style.background} />
             <Ship ref={ref} />
         </div>
     )
