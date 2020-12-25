@@ -1,5 +1,6 @@
 import React, { ForwardedRef, MutableRefObject, useEffect, useRef, useState } from "react";
 import style from "./style.module.scss";
+import classnames from "classnames";
 
 interface ShipState {
     azimut: number;
@@ -156,11 +157,7 @@ const Ship = React.forwardRef((props, ref: ForwardedRef<HTMLDivElement>) => {
     return (
         <div className={style.shipContainer}>
             <div ref={shipRef} className={style.ship} style={shipStyle}>
-                <div className={style.status}>
-                    Azimut: {shipState.azimut}<br/>
-                    aX: {shipState.vX}<br/>
-                    aY: {shipState.vY}<br/>
-                </div>
+                <div className={classnames(style.thrust, shipState.thrust ? style.visible : null)} />
             </div>
         </div>
     )

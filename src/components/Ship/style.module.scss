@@ -5,9 +5,9 @@
     position: absolute;
     color: white;
     transition: all 0.05s ease-in-out;
+    font-family: "Major Mono Display", monospace;
 
     &:after {
-      font-family: "Major Mono Display", monospace;
       content: "A";
 
       position: absolute;
@@ -19,6 +19,26 @@
       font-size: 30px;
       line-height: 19px;
       color: yellow;
+    }
+
+    .thrust {
+      display: none;
+      transition: all 0.3 ease;
+
+      &.visible {
+        display: block;
+      }
+
+      &:after {
+        content: "Â";
+        font-size: 16px;
+        color: red;
+        position: absolute;
+        transform: rotate(90deg);
+        top: -8px;
+        left: -27px;
+        font-weight: 600;
+      }
     }
 
     .status {
