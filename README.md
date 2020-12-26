@@ -9,7 +9,8 @@ This is a training project to try and do some cool stuff with react:
 - Smooth Keyboard control with multiple key press
 - Google Fonts
 - Canvas drawing
-- Thrust effects (modified from https://codepen.io/redstapler/pen/wRdzwx)
+- Thrust effects (modified fire CSS effect from https://codepen.io/redstapler/pen/wRdzwx)
+- Lasers with CSS!
 
 Move the spaceship along the screen!
 
@@ -17,7 +18,8 @@ Move the spaceship along the screen!
 
     Left: Turn left.
     Right: Turn right.
-    Up: Thrust!
+    Up: Thrust
+    Space: Fire!
 
 ## Get started
 

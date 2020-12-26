@@ -10,6 +10,9 @@ interface ShipState {
     left: number;
     thrust: boolean;
     turn: number;
+    laser: boolean;
+    laserTime: number;
+    laserRecharge: number;
 }
 
 const TURN_LEFT = -1;
@@ -21,6 +24,9 @@ const THRUST_FACTOR = .2;
 
 const COLLISION_BUMP = .20;
 
+const LASER_TIME = 4;
+const LASER_CHARGE_TIME = 60;
+
 const Ship = React.forwardRef((props, ref: ForwardedRef<HTMLDivElement>) => {
     
     const initial: ShipState = {
@@ -31,6 +37,9 @@ const Ship = React.forwardRef((props, ref: ForwardedRef<HTMLDivElement>) => {
         left: 400,
         thrust: false,
         turn: 0,
+        laser: false,
+        laserTime: LASER_TIME,
+        laserRecharge: 0,
     }
 
     const screenRef = (ref as MutableRefObject<HTMLDivElement>).current;
@@ -57,6 +66,21 @@ const Ship = React.forwardRef((props, ref: ForwardedRef<HTMLDivElement>) => {
                     previous.azimut += previous.turn * TURN_FACTOR;
                     return previous;
                 });
+            }
+
+            if (shipState.laser) {
+                setShipState((previous) => {
+                    previous.laser = previous.laserTime === 0 ? false : true;
+                    if (previous.laserTime === 0) previous.laserRecharge = LASER_CHARGE_TIME;
+                    previous.laserTime = previous.laserTime > 0 ? previous.laserTime -1 : LASER_TIME;
+                    return previous;
+                });
+            } else {
+                setShipState((previous) => {
+                    previous.laserRecharge = previous.laserRecharge > 0 ? previous.laserRecharge -1 : 0;
+                    return previous;
+                });
+
             }
 
             checkCollision();
@@ -98,6 +122,15 @@ const Ship = React.forwardRef((props, ref: ForwardedRef<HTMLDivElement>) => {
         }
     }
 
+    const fire = (): void => {
+        if (!shipState.laser && shipState.laserRecharge === 0) {
+            setShipState((previous) => {
+                previous.laser = true;
+                return previous;
+            });
+        }
+    }
+
     const turnShip = (direction: number): void => {
         if (shipState.turn !== direction) {
             setShipState((previous) => {
@@ -119,6 +152,9 @@ const Ship = React.forwardRef((props, ref: ForwardedRef<HTMLDivElement>) => {
                 break;
                 case "ArrowUp":
                     engageThruster(true);
+                break;
+                case " ":
+                    fire();
                 break;
             }
         };
@@ -165,6 +201,7 @@ const Ship = React.forwardRef((props, ref: ForwardedRef<HTMLDivElement>) => {
                         <div className={classnames(style.flame, style.white)}></div>
                     </div>
                 </div>
+                <div className={classnames(style.laser, shipState.laser ? style.on : null)} />
             </div>
         </div>
     )
