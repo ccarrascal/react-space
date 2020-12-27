@@ -1,5 +1,7 @@
 .asteroid {
   position: absolute;
+  height: 30px;
+  width: 22px;
 
   &:after {
     content: "O";
@@ -8,5 +10,7 @@
     font-size: 30px;
     font-weight: 600;
     font-family: "Major Mono Display", monospace;
+    left: 0;
+    top: 0;
   }
 }

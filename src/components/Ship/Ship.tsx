@@ -19,13 +19,13 @@ const TURN_LEFT = -1;
 const TURN_RIGHT = 1;
 const TURN_NEUTRAL = 0;
 
-const TURN_FACTOR = 2;
+const TURN_FACTOR = 10;
 const THRUST_FACTOR = .2;
 
 const COLLISION_BUMP = .20;
 
-const LASER_TIME = 4;
-const LASER_CHARGE_TIME = 60;
+const LASER_TIME = 20;
+const LASER_CHARGE_TIME = 0;
 
 const Ship = React.forwardRef((props, ref: ForwardedRef<HTMLDivElement>) => {
     
@@ -192,7 +192,7 @@ const Ship = React.forwardRef((props, ref: ForwardedRef<HTMLDivElement>) => {
 
     return (
         <div className={style.shipContainer}>
-            <div ref={shipRef} className={style.ship} style={shipStyle}>
+            <div id="player1" ref={shipRef} className={style.ship} style={shipStyle}>
                 <div className={classnames(style.thrust, shipState.thrust ? style.visible : null)} >
                     <div className={style.flameWrapper}>
                         <div className={classnames(style.flame, style.red)}></div>
@@ -201,7 +201,7 @@ const Ship = React.forwardRef((props, ref: ForwardedRef<HTMLDivElement>) => {
                         <div className={classnames(style.flame, style.white)}></div>
                     </div>
                 </div>
-                <div className={classnames(style.laser, shipState.laser ? style.on : null)} />
+                <div id="laser" className={classnames(style.laser, shipState.laser ? style.on : null)} />
             </div>
         </div>
     )
