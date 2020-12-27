@@ -1,3 +1,4 @@
+import { Asteroid } from "components/Asteroid";
 import { Ship } from "components/Ship";
 import React, { useEffect } from "react";
 import style from "./style.module.scss";
@@ -48,6 +49,9 @@ const Screen = (props: Props) => {
         <div ref={ref} className={style.screen} id="Screen">
             <canvas ref={canvasRef} className={style.background} />
             <Ship ref={ref} />
+            <div className={style.enemies}>
+                <Asteroid />
+            </div>
         </div>
     )
 }

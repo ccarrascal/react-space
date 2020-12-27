@@ -1,0 +1,12 @@
+.asteroid {
+  position: absolute;
+
+  &:after {
+    content: "O";
+    position: absolute;
+    color: brown;
+    font-size: 30px;
+    font-weight: 600;
+    font-family: "Major Mono Display", monospace;
+  }
+}
