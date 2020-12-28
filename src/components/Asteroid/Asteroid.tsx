@@ -28,42 +28,47 @@ const Asteroid = (): JSX.Element => {
     };
 
     const restartPosition = () => {
-        const newState: AsteroidState = {
-            vX: 0,
-            vY: 0,
-            top: 0,
-            left: 0,
-            destroyed: false,
-        };
 
-        newState.top = Math.floor(Math.random() * document.body.clientHeight);
-        newState.left = Math.floor(Math.random() * document.body.clientWidth);
+        const setDirection = (left: number | null, top: number | null, degrees: number): AsteroidState => {
+            const radians = degrees * (Math.PI / 180);
+            const newState: AsteroidState = {
+                left: left !== null ? left : Math.floor(Math.random() * document.body.clientWidth),
+                top: top !== null ? top : Math.floor(Math.random() * document.body.clientHeight),
+                vX: parseFloat((Math.cos(radians) * SPEED).toFixed(3)),
+                vY: parseFloat((Math.sin(radians) * SPEED).toFixed(3)),
+                destroyed: false,
+            };
 
+            return newState;
+        }
+
+        let newState: AsteroidState = {...initial};
+        let degrees = 0;
         const origin = Math.ceil(Math.random() * 4);
 
         switch (origin) {
             case ORIGIN_TOP:
-                newState.top = 0;
-                newState.vY = SPEED;
+                degrees = Math.random() * 180;
+                newState = setDirection(null, 0, degrees);
                 break;
             case ORIGIN_RIGHT:
-                newState.left = document.body.clientWidth;
-                newState.vX = -1 * SPEED;
+                degrees = Math.random() * 180 + 90;
+                newState = setDirection(document.body.clientWidth, null, degrees);
                 break;
             case ORIGIN_BOTTOM:
-                newState.top = document.body.clientHeight;
-                newState.vY = -1 * SPEED;
+                degrees = Math.random() * 180 + 180;
+                newState = setDirection(null, document.body.clientHeight, degrees);
                 break;
             case ORIGIN_LEFT:
-                newState.left = 0;
-                newState.vX = 1 * SPEED;
+                degrees = Math.random() * 180 - 90;
+                newState = setDirection(0, null, degrees);
                 break;
         }
 
         return newState;
     }
 
-    const checkIfBlasted = (el2: any): boolean => {
+    const checkIfBlasted = (asteroid: any): boolean => {
 
         const laser = document.getElementById("laser");
         const ship = document.getElementById("player1");
@@ -74,7 +79,7 @@ const Asteroid = (): JSX.Element => {
             azimut = azimut < 0 ?  azimut + 360 : azimut;
 
             const rect1 = laser.getBoundingClientRect();
-            const rect2 = el2.getBoundingClientRect();
+            const rect2 = asteroid.getBoundingClientRect();
 
             let hit = false;
             if ((azimut >= 0 && azimut <= 90) || (azimut >= 180 && azimut <= 270)) {

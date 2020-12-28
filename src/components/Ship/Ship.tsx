@@ -19,7 +19,7 @@ const TURN_LEFT = -1;
 const TURN_RIGHT = 1;
 const TURN_NEUTRAL = 0;
 
-const TURN_FACTOR = 10;
+const TURN_FACTOR = 5;
 const THRUST_FACTOR = .2;
 
 const COLLISION_BUMP = .20;
