@@ -8,6 +8,7 @@ interface AsteroidState {
     top: number;
     left: number;
     destroyed: boolean;
+    azimut: number;
 }
 
 const ORIGIN_TOP = 1;
@@ -25,6 +26,7 @@ const Asteroid = (): JSX.Element => {
         top: 0,
         left: 0,
         destroyed: false,
+        azimut: 0,
     };
 
     const restartPosition = () => {
@@ -37,6 +39,7 @@ const Asteroid = (): JSX.Element => {
                 vX: parseFloat((Math.cos(radians) * SPEED).toFixed(3)),
                 vY: parseFloat((Math.sin(radians) * SPEED).toFixed(3)),
                 destroyed: false,
+                azimut: 0,
             };
 
             return newState;
@@ -111,6 +114,7 @@ const Asteroid = (): JSX.Element => {
         setAsteroidState((previous) => {
             previous.top += previous.vY;
             previous.left += previous.vX;
+            previous.azimut += 1;
             return previous;
         });
 
@@ -143,6 +147,7 @@ const Asteroid = (): JSX.Element => {
         top: asteroidState.top,
         left: asteroidState.left,
         visibility: asteroidState.destroyed ? "hidden" : "visible",
+        transform: "rotate(" + asteroidState.azimut + "deg)",
     } as CSSProperties;
 
     return (

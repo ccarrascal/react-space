@@ -95,17 +95,17 @@ const Ship = React.forwardRef((props, ref: ForwardedRef<HTMLDivElement>) => {
             shipState.vX = collision(shipState.vX);
             shipState.left = 0;
         }
-        if (shipState.left > screenRef.offsetWidth) {
+        if (shipState.left > screenRef.offsetWidth - 40) {
             shipState.vX = collision(shipState.vX);
-            shipState.left = screenRef.offsetWidth;
+            shipState.left = screenRef.offsetWidth - 40;
         }
         if (shipState.top < 0) {
             shipState.vY = collision(shipState.vY);
             shipState.top = 0;
         }
-        if (shipState.top > screenRef.offsetHeight) {
+        if (shipState.top > screenRef.offsetHeight - 40) {
             shipState.vY = collision(shipState.vY);
-            shipState.top = screenRef.offsetHeight;
+            shipState.top = screenRef.offsetHeight - 40;
         }
     }
 

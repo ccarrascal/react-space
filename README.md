@@ -13,6 +13,9 @@ This is a training project to try and do some cool stuff with react:
 - Lasers with CSS!
 - Collision detection with enemies. Taken from http://www.jeffreythompson.org/collision-detection/line-rect.php
 
+- Graphics
+  - https://www.freepik.com/vectors/technology: Technology vector created by brgfx - www.freepik.com
+
 ## What is this thing?
 
 Move the spaceship along the screen and blast away those bad asteriods.
