@@ -47,7 +47,7 @@ const Screen = (props: Props) => {
 
     return (
         <div ref={shipRef} className={style.screen} id="Screen">
-            <canvas ref={canvasRef} className={style.background} />
+            <canvas id={"canvas"} ref={canvasRef} className={style.background} />
             <Ship ref={shipRef} />
             <div className={style.enemies}>
                 <Asteroid />
