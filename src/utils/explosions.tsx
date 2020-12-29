@@ -76,7 +76,7 @@ export const explosion = (x: number, y: number) => {
             this.x = x || Math.round(Math.random() * (canvas !== null ? canvas?.width : 1));
             this.y = y || Math.round(Math.random() * (canvas !== null ? canvas?.height : 1));
             this.radius = Math.ceil(Math.random() * config.maxParticleSize);
-            this.color = colorVariation(colorPalette.matter[Math.floor(Math.random() * colorPalette.matter.length)],true );
+            this.color = colorVariation(colorPalette.matter[Math.floor(Math.random() * colorPalette.matter.length)], true);
             this.speed = Math.pow(Math.ceil(Math.random() * config.maxSpeed), .7);
             this.direction = Math.round(Math.random() * 360);
         }
@@ -85,7 +85,7 @@ export const explosion = (x: number, y: number) => {
     // Used to find the rocks next point in space, accounting for speed and direction
     const updateParticleModel = (p: Particle) => {
         var a = 180 - (p.direction + 90); // find the 3rd angle
-        p.direction > 0 && p.direction < 180 ? p.x += p.speed * Math.sin(p.d) / Math.sin(p.speed) : p.x -= p.speed * Math.sin(p.direction) / Math.sin(p.speed);
+        p.direction > 0 && p.direction < 180 ? p.x += p.speed * Math.sin(p.direction) / Math.sin(p.speed) : p.x -= p.speed * Math.sin(p.direction) / Math.sin(p.speed);
         p.direction > 90 && p.direction < 270 ? p.y += p.speed * Math.sin(a) / Math.sin(p.speed) : p.y -= p.speed * Math.sin(a) / Math.sin(p.speed);
         return p;
     };
@@ -93,7 +93,7 @@ export const explosion = (x: number, y: number) => {
     // Provides some nice color variation
     // Accepts an rgba object
     // returns a modified rgba object or a rgba string if true is passed in for argument 2
-    const colorVariation = (color: any, returnString: string) => {
+    const colorVariation = (color: any, returnString: boolean) => {
         var r,g,b,a;
         r = Math.round(((Math.random() * config.colorVariation) - (config.colorVariation/2)) + color.r);
         g = Math.round(((Math.random() * config.colorVariation) - (config.colorVariation/2)) + color.g);
