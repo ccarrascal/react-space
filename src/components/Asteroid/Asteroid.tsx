@@ -1,5 +1,5 @@
 import React, { CSSProperties, MutableRefObject, useEffect, useRef, useState } from "react";
-import { lineRect } from "utils";
+import { explosion, lineRect } from "utils";
 import style from "./style.module.scss";
 
 interface AsteroidState {
@@ -76,6 +76,8 @@ const Asteroid = (): JSX.Element => {
         const laser = document.getElementById("laser");
         const ship = document.getElementById("player1");
 
+        let hit = false;
+
         if (ship && laser && laser.className.includes("style_on")) {
             const search = ship.style.transform.match(/.*rotate\((.*)deg\)/);
             let azimut = search && search[1] ? parseInt(search[1]) % 360 : 0;
@@ -84,23 +86,22 @@ const Asteroid = (): JSX.Element => {
             const rect1 = laser.getBoundingClientRect();
             const rect2 = asteroid.getBoundingClientRect();
 
-            let hit = false;
+
             if ((azimut >= 0 && azimut <= 90) || (azimut >= 180 && azimut <= 270)) {
                 hit = lineRect(rect1.left, rect1.top, rect1.right, rect1.bottom, rect2.left, rect2.top, rect2.width, rect2.height);
             } else {
                 hit = lineRect(rect1.left, rect1.bottom, rect1.right, rect1.top, rect2.left, rect2.top, rect2.width, rect2.height);
             }
 
-            return hit;
         }
-
-        return false;
+        return hit;
     };
 
     const animate = () => {
 
         if (asteroidState.top <= 0 || asteroidState.top >= document.body.clientHeight || asteroidState.left <= 0 || asteroidState.left >= document.body.clientWidth) {
             const newState = restartPosition();
+
             setAsteroidState((previous) => {
                 previous.left = newState.left;
                 previous.top = newState.top;
@@ -118,11 +119,16 @@ const Asteroid = (): JSX.Element => {
             return previous;
         });
 
-        if (checkIfBlasted(asteroidRef.current)) {
-            setAsteroidState((previous) => {
-                previous.destroyed = true;
-                return previous;
-            });
+        if (asteroidState.destroyed === false) {
+
+            if (checkIfBlasted(asteroidRef.current)) {
+                explosion(asteroidState.left, asteroidState.top);
+
+                setAsteroidState((previous) => {
+                    previous.destroyed = true;
+                    return previous;
+                });
+            }
         }
 
         setAsteroidState(previous => ({...asteroidState}));
