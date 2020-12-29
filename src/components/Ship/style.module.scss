@@ -8,35 +8,27 @@
     color: white;
     transition: all 0.05s ease-in-out;
     font-family: "Major Mono Display", monospace;
-
-    &:after {
-      content: "A";
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) rotate(90deg);
-      height: 21px;
-      width: 22px;
-      font-size: 30px;
-      line-height: 19px;
-      color: yellow;
-    }
+    height: 30px;
+    width: 40px;
+    background-image: url(./images/ship.png);
+    background-size: 40px 30px;
+    left: 50%;
+    top: 50%;
 
     .thrust {
-      position: relative;
+      position: absolute;
       opacity: 0;
       transition: visibility 0.2s, opacity 0.2s linear;
+      left: -18px;
+      top: 22px;
+      height: 30px;
 
       &.visible {
         opacity: 1;
       }
 
       .flameWrapper {
-        position: absolute;
         animation: flicker 3ms ease-in infinite;
-
-        left: -27px;
-        top: 8px;
       }
     }
 
@@ -139,7 +131,8 @@
   box-shadow: 0px 0px 10px 1px gold;
   color: orangered;
   position: absolute;
-  left: 10px;
+  left: 40px;
+  top: 50%;
   animation: laser 3ms ease-in infinite;
   transform-origin: top left;
   visibility: hidden;
