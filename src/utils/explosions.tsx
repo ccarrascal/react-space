@@ -1,12 +1,11 @@
-// Modified from: https://codepen.io/deanwagman/pen/EjLBdQ
-
+// Inspired by: https://codepen.io/deanwagman/pen/EjLBdQ
 
 export const explosion = (x: number, y: number) => {
     var particles: any[] = [];
 
     // Configuration, Play with these
     const config = {
-        particleNumber: 100,
+        particleNumber: 300,
         maxParticleSize: 3,
         maxSpeed: 40,
         colorVariation: 50
@@ -27,26 +26,23 @@ export const explosion = (x: number, y: number) => {
     const frame = () => {
         count--;
 
-        // Draw background first
-        drawBg(ctx, colorPalette.bg);
-        // Update Particle models to new position
+        drawBg();
         particles.map((p) => {
             return updateParticleModel(p);
         });
-        // Draw em'
+
         particles.forEach((p) => {
             drawParticle(p.x, p.y, p.radius, p.color);
         });
   
         count > 0 && window.requestAnimationFrame(frame);
-        count === 0 && drawBg(ctx, colorPalette.bg);
+        count === 0 && drawBg();
     };
 
     // Draws the background for the canvas, because space
-    const drawBg = (ctx: any, color: any) => {
-        if (canvas) {
-            ctx.fillStyle = "rgb(" + color.r + "," + color.g + "," + color.b + ")";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+    const drawBg = () => {
+        if (ctx) {
+            ctx.putImageData(background, 0, 0);
         }
     };
 
@@ -54,9 +50,6 @@ export const explosion = (x: number, y: number) => {
         for (let i = 0; i < numParticles; i++) {
             particles.push(new Particle(x, y));
         }
-        particles.forEach((p) => {
-            drawParticle(p.x, p.y, p.r, p.c);
-        });
     };
 
     // Just the function that physically draws the particles
@@ -115,26 +108,17 @@ export const explosion = (x: number, y: number) => {
 
     // Remove particles that aren't on the canvas
     const cleanUpArray = () => {
-
-            particles = particles.filter((p) => { 
-                // return (p.x > -100 && p.y > -100); 
-                return (
-                    p.x >= 0 && 
-                    p.x < (canvas ? canvas.width : 0) && 
-                    p.y > -100
-                ); 
-            });
+        particles = [];
     };
 
-    var count = 60;
+    var count = 90;
     var canvas: HTMLCanvasElement | null = document.querySelector("#canvas");
     var ctx = canvas ? canvas.getContext('2d') : null;
+    var background: ImageData;
 
-    // Set Canvas to be window size
-    if (canvas !== null) {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-    } 
+    if (canvas !== null && ctx !== null) {
+        background = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    }
 
     cleanUpArray();
     initParticles(config.particleNumber, x, y);

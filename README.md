@@ -12,9 +12,8 @@ This is a training project to try and do some cool stuff with react:
 - Thrust effects (modified fire CSS effect from https://codepen.io/redstapler/pen/wRdzwx)
 - Lasers with CSS!
 - Collision detection with enemies. Taken from http://www.jeffreythompson.org/collision-detection/line-rect.php
-
-- Graphics
-  - https://www.freepik.com/vectors/technology: Technology vector created by brgfx - www.freepik.com
+- Graphics from Technology vector created by brgfx https://www.freepik.com/vectors/technology
+- CSS Explosions based in dewanwagan's work: https://codepen.io/deanwagman/pen/EjLBdQ
 
 ## What is this thing?
 
