@@ -1,3 +1,4 @@
+import { Asteroid } from "components/Asteroid";
 import { Ship } from "components/Ship";
 import React, { useEffect } from "react";
 import style from "./style.module.scss";
@@ -30,7 +31,7 @@ const drawStars = (total: number, canvas: HTMLCanvasElement | null) => {
 }
 
 const Screen = (props: Props) => {
-    const ref = React.createRef<HTMLDivElement>();
+    const shipRef = React.createRef<HTMLDivElement>();
     const canvasRef = React.createRef<HTMLCanvasElement>();
 
     useEffect(() => {
@@ -45,9 +46,12 @@ const Screen = (props: Props) => {
     }, [canvasRef]);
 
     return (
-        <div ref={ref} className={style.screen} id="Screen">
+        <div ref={shipRef} className={style.screen} id="Screen">
             <canvas ref={canvasRef} className={style.background} />
-            <Ship ref={ref} />
+            <Ship ref={shipRef} />
+            <div className={style.enemies}>
+                <Asteroid />
+            </div>
         </div>
     )
 }
