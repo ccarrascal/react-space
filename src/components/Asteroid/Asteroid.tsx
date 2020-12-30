@@ -1,4 +1,6 @@
+import { addScore } from "actions";
 import React, { CSSProperties, MutableRefObject, useEffect, useRef, useState } from "react";
+import store from "store";
 import { explosion, lineRect } from "utils";
 import style from "./style.module.scss";
 
@@ -123,6 +125,7 @@ const Asteroid = (): JSX.Element => {
 
             if (checkIfBlasted(asteroidRef.current)) {
                 explosion(asteroidState.left, asteroidState.top);
+                store.dispatch(addScore());
 
                 setAsteroidState((previous) => {
                     previous.destroyed = true;
