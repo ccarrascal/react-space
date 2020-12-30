@@ -1,0 +1,15 @@
+.score {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: row;
+  font-size: 20px;
+  justify-content: flex-end;
+
+  .title {
+    text-transform: lowercase;
+    font-weight: 600;
+  }
+  .data {
+    position: relative;
+  }
+}
