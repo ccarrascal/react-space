@@ -33,13 +33,18 @@ const Asteroid = (): JSX.Element => {
 
     const restartPosition = () => {
 
+        const getSpeed = (): number => {
+            const factor = store.getState().score / 8;
+            return factor + SPEED;
+        }
+
         const setDirection = (left: number | null, top: number | null, degrees: number): AsteroidState => {
             const radians = degrees * (Math.PI / 180);
             const newState: AsteroidState = {
                 left: left !== null ? left : Math.floor(Math.random() * document.body.clientWidth),
                 top: top !== null ? top : Math.floor(Math.random() * document.body.clientHeight),
-                vX: parseFloat((Math.cos(radians) * SPEED).toFixed(3)),
-                vY: parseFloat((Math.sin(radians) * SPEED).toFixed(3)),
+                vX: parseFloat((Math.cos(radians) * getSpeed()).toFixed(3)),
+                vY: parseFloat((Math.sin(radians) * getSpeed()).toFixed(3)),
                 destroyed: false,
                 azimut: 0,
             };
@@ -102,6 +107,7 @@ const Asteroid = (): JSX.Element => {
     const animate = () => {
 
         if (asteroidState.top <= 0 || asteroidState.top >= document.body.clientHeight || asteroidState.left <= 0 || asteroidState.left >= document.body.clientWidth) {
+
             const newState = restartPosition();
 
             setAsteroidState((previous) => {

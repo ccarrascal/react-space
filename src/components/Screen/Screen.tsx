@@ -1,5 +1,5 @@
 import { setBackground } from "actions";
-import { Asteroid } from "components/Asteroid";
+import { Enemies } from "components/Enemies";
 import { Ship } from "components/Ship";
 import React, { useEffect } from "react";
 import store from "store";
@@ -52,9 +52,7 @@ const Screen = (props: Props) => {
         <div ref={shipRef} className={style.screen} id="Screen">
             <canvas id={"canvas"} ref={canvasRef} className={style.background} />
             <Ship ref={shipRef} />
-            <div className={style.enemies}>
-                <Asteroid />
-            </div>
+            <Enemies />
         </div>
     )
 }
