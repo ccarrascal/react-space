@@ -1,7 +1,30 @@
 // Inspired by: https://codepen.io/deanwagman/pen/EjLBdQ
 
+import { setParticles } from "actions";
+import store from "store";
+
 export const explosion = (x: number, y: number) => {
-    var particles: any[] = [];
+    const ANIMATION_FRAMES = 90;
+
+    class Particle {
+        x: number;
+        y: number;
+        radius: number;
+        color: any;
+        speed: number;
+        direction: number;
+        frames: number;
+
+        constructor(x: number, y: number) {
+            this.x = x || Math.round(Math.random() * (canvas !== null ? canvas?.width : 1));
+            this.y = y || Math.round(Math.random() * (canvas !== null ? canvas?.height : 1));
+            this.radius = Math.ceil(Math.random() * config.maxParticleSize);
+            this.color = colorVariation(colorPalette.matter[Math.floor(Math.random() * colorPalette.matter.length)], true);
+            this.speed = Math.pow(Math.ceil(Math.random() * config.maxSpeed), .7);
+            this.direction = Math.round(Math.random() * 360);
+            this.frames = ANIMATION_FRAMES;
+        }
+    }
 
     // Configuration, Play with these
     const config = {
@@ -32,23 +55,20 @@ export const explosion = (x: number, y: number) => {
         });
 
         particles.forEach((p) => {
-            drawParticle(p.x, p.y, p.radius, p.color);
+            if (p.frames > 0) {
+                drawParticle(p.x, p.y, p.radius, p.color);
+            }
         });
-  
+        store.dispatch(setParticles(particles));
+
         count > 0 && window.requestAnimationFrame(frame);
-        count === 0 && drawBg();
+        count === 0 && drawBg() && cleanUpArray();
     };
 
     // Draws the background for the canvas, because space
     const drawBg = () => {
         if (ctx) {
             ctx.putImageData(background, 0, 0);
-        }
-    };
-
-    const initParticles = (numParticles: number, x: number, y: number) => {
-        for (let i = 0; i < numParticles; i++) {
-            particles.push(new Particle(x, y));
         }
     };
 
@@ -64,29 +84,12 @@ export const explosion = (x: number, y: number) => {
         }
     };
 
-    class Particle {
-        x: number;
-        y: number;
-        radius: number;
-        color: any;
-        speed: number;
-        direction: number;
-
-        constructor(x: number, y: number) {
-            this.x = x || Math.round(Math.random() * (canvas !== null ? canvas?.width : 1));
-            this.y = y || Math.round(Math.random() * (canvas !== null ? canvas?.height : 1));
-            this.radius = Math.ceil(Math.random() * config.maxParticleSize);
-            this.color = colorVariation(colorPalette.matter[Math.floor(Math.random() * colorPalette.matter.length)], true);
-            this.speed = Math.pow(Math.ceil(Math.random() * config.maxSpeed), .7);
-            this.direction = Math.round(Math.random() * 360);
-        }
-    }
-
     // Used to find the rocks next point in space, accounting for speed and direction
     const updateParticleModel = (p: Particle) => {
         var a = 180 - (p.direction + 90); // find the 3rd angle
         p.direction > 0 && p.direction < 180 ? p.x += p.speed * Math.sin(p.direction) / Math.sin(p.speed) : p.x -= p.speed * Math.sin(p.direction) / Math.sin(p.speed);
         p.direction > 90 && p.direction < 270 ? p.y += p.speed * Math.sin(a) / Math.sin(p.speed) : p.y -= p.speed * Math.sin(a) / Math.sin(p.speed);
+        p.frames--;
         return p;
     };
 
@@ -106,19 +109,30 @@ export const explosion = (x: number, y: number) => {
         }
     };
 
-    // Remove particles that aren't on the canvas
+    // Remove particles from finished explosions.
     const cleanUpArray = () => {
-        particles = [];
+        particles = particles.filter(p => p.frames > 0);
+        store.dispatch(setParticles(particles));
     };
 
-    var count = 90;
+    const initParticles = (numParticles: number, x: number, y: number) => {
+        for (let i = 0; i < numParticles; i++) {
+            particles.push(new Particle(x, y));
+        }
+        store.dispatch(setParticles(particles));
+    };
+
+    // Get the original background from the store.
+    const getBackground = (canvas: HTMLCanvasElement | null): ImageData => {
+        const state = store.getState();
+        return state.background !== null ? state.background : new ImageData(1, 1);
+    }
+
+    var particles: any[] = store.getState().particles;
+    var count = ANIMATION_FRAMES;
     var canvas: HTMLCanvasElement | null = document.querySelector("#canvas");
     var ctx = canvas ? canvas.getContext('2d') : null;
-    var background: ImageData;
-
-    if (canvas !== null && ctx !== null) {
-        background = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    }
+    var background: ImageData = getBackground(canvas);
 
     cleanUpArray();
     initParticles(config.particleNumber, x, y);

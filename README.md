@@ -14,6 +14,7 @@ This is a training project to try and do some cool stuff with react:
 - Collision detection with enemies. Taken from http://www.jeffreythompson.org/collision-detection/line-rect.php
 - Graphics from Technology vector created by brgfx https://www.freepik.com/vectors/technology
 - CSS Explosions based in dewanwagan's work: https://codepen.io/deanwagman/pen/EjLBdQ
+- Redux to control game states
 
 ## What is this thing?
 
