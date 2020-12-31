@@ -61,8 +61,12 @@ export const explosion = (x: number, y: number) => {
         });
         store.dispatch(setParticles(particles));
 
-        count > 0 && window.requestAnimationFrame(frame);
-        count === 0 && drawBg() && cleanUpArray();
+        if (count > 0) {
+            window.requestAnimationFrame(frame);
+        } else {
+            drawBg();
+            cleanUpArray();
+        }
     };
 
     // Draws the background for the canvas, because space

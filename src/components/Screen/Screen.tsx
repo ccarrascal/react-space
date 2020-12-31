@@ -54,9 +54,6 @@ const Screen = (props: Props) => {
             <Ship ref={shipRef} />
             <div className={style.enemies}>
                 <Asteroid />
-                <Asteroid />
-                <Asteroid />
-                <Asteroid />
             </div>
         </div>
     )
