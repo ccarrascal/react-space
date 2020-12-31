@@ -1,8 +1,15 @@
-import { ADD_SCORE } from "actions";
+import { ADD_SCORE, SET_BACKGROUND, SET_PARTICLES } from "actions";
 
-const initialState = {
-  score: 0,
-  background: null,
+interface AppState {
+    score: number;
+    background: ImageData | null; // Original background to use in animation frames.
+    particles: any[];  // Explosions particles.
+}
+
+const initialState: AppState = {
+    score: 0,
+    background: null,
+    particles: [],
 };
 
 function rootReducer(state = initialState, action: any) {
@@ -11,8 +18,16 @@ function rootReducer(state = initialState, action: any) {
             state.score++;
             state = {...state};
         break;
+        case SET_BACKGROUND:
+            state.background = action.background;
+            state = {...state}
+        break;
+        case SET_PARTICLES:
+            state.particles = action.particles;
+            state = {...state}
+        break;
     }
-  return state;
+    return state;
 };
 
 export default rootReducer;

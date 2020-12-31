@@ -1,16 +1,18 @@
+import { setBackground } from "actions";
 import { Asteroid } from "components/Asteroid";
 import { Ship } from "components/Ship";
 import React, { useEffect } from "react";
+import store from "store";
 import style from "./style.module.scss";
+
+const STAR_COUNT = 6000;
 
 interface Props {
     children: JSX.Element | JSX.Element[];
 }
 
 const drawStars = (total: number, canvas: HTMLCanvasElement | null) => {
-
     if (!canvas) return;
-
     const context = canvas && canvas.getContext("2d");
 
     canvas.width = document.body.clientWidth;
@@ -27,6 +29,7 @@ const drawStars = (total: number, canvas: HTMLCanvasElement | null) => {
             const size = Math.random() > .9? 2: 1;
             context.fillRect(star.x, star.y, size, size);
         }
+        store.dispatch(setBackground(canvas));
     }
 }
 
@@ -36,7 +39,7 @@ const Screen = (props: Props) => {
 
     useEffect(() => {
         const resizeWindow = () => {
-            drawStars(6000, canvasRef.current);
+            drawStars(STAR_COUNT, canvasRef.current);
         }
 
         resizeWindow();
