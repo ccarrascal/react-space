@@ -1,10 +1,11 @@
-import { addScore } from "actions";
-import React, { CSSProperties, MutableRefObject, useEffect, useRef, useState } from "react";
+import { addScore, setAsteroid } from "actions";
+import { CSSProperties, MutableRefObject, useEffect, useRef, useCallback } from "react";
 import store from "store";
 import { explosion, lineRect } from "utils";
 import style from "./style.module.scss";
+import { useSelector} from "react-redux";
 
-interface AsteroidState {
+export interface AsteroidState {
     vX: number;
     vY: number;
     top: number;
@@ -22,7 +23,7 @@ const SPEED = 2;
 
 const Asteroid = (): JSX.Element => {
 
-    const initial: AsteroidState | null = {
+    const initialAsteroidState: AsteroidState | null = {
         vX: 0,
         vY: 0,
         top: 0,
@@ -52,7 +53,7 @@ const Asteroid = (): JSX.Element => {
             return newState;
         }
 
-        let newState: AsteroidState = {...initial};
+        let newState: AsteroidState = {...initialAsteroidState};
         let degrees = 0;
         const origin = Math.ceil(Math.random() * 4);
 
@@ -74,11 +75,10 @@ const Asteroid = (): JSX.Element => {
                 newState = setDirection(0, null, degrees);
                 break;
         }
-
         return newState;
     }
 
-    const checkIfBlasted = (asteroid: any): boolean => {
+    const checkIfBlasted = (asteroidRef: any): boolean => {
 
         const laser = document.getElementById("laser");
         const ship = document.getElementById("player1");
@@ -91,7 +91,7 @@ const Asteroid = (): JSX.Element => {
             azimut = azimut < 0 ?  azimut + 360 : azimut;
 
             const rect1 = laser.getBoundingClientRect();
-            const rect2 = asteroid.getBoundingClientRect();
+            const rect2 = asteroidRef.getBoundingClientRect();
 
 
             if ((azimut >= 0 && azimut <= 90) || (azimut >= 180 && azimut <= 270)) {
@@ -104,65 +104,49 @@ const Asteroid = (): JSX.Element => {
         return hit;
     };
 
-    const animate = () => {
+    const animate = useCallback(() => {
 
-        if (asteroidState.top <= 0 || asteroidState.top >= document.body.clientHeight || asteroidState.left <= 0 || asteroidState.left >= document.body.clientWidth) {
-
-            const newState = restartPosition();
-
-            setAsteroidState((previous) => {
-                previous.left = newState.left;
-                previous.top = newState.top;
-                previous.vX = newState.vX;
-                previous.vY = newState.vY;
-                previous.destroyed = newState.destroyed;
-                return previous;
-            });
+        if (asteroid.top <= 0 || asteroid.top >= document.body.clientHeight || asteroid.left <= 0 || asteroid.left >= document.body.clientWidth) {
+            // eslint-disable-next-line react-hooks/exhaustive-deps
+            asteroid = restartPosition();
         }
 
-        setAsteroidState((previous) => {
-            previous.top += previous.vY;
-            previous.left += previous.vX;
-            previous.azimut += 1;
-            return previous;
-        });
+        asteroid.top += asteroid.vY;
+        asteroid.left += asteroid.vX;
+        asteroid.azimut += 1;
 
-        if (asteroidState.destroyed === false) {
-
+        if (asteroid.destroyed === false) {
             if (checkIfBlasted(asteroidRef.current)) {
-                explosion(asteroidState.left, asteroidState.top);
+                explosion(asteroid.left, asteroid.top);
                 store.dispatch(addScore());
-
-                setAsteroidState((previous) => {
-                    previous.destroyed = true;
-                    return previous;
-                });
+                asteroid.destroyed = true;
+                asteroid = restartPosition();
             }
         }
 
-        setAsteroidState(previous => ({...asteroidState}));
+        store.dispatch(setAsteroid(asteroid));
         animationRef.current = requestAnimationFrame(animate);
-    }
+    }, []);
 
-    const [asteroidState, setAsteroidState] = useState(initial);
+    var asteroid = useSelector((state: { asteroids: any; }): any => state.asteroids);
+    asteroid = asteroid === null ? initialAsteroidState : asteroid;
     const animationRef: MutableRefObject<number|undefined> = useRef();
     const asteroidRef: MutableRefObject<null> = useRef(null);
 
     useEffect(() => {
 
         animationRef.current = requestAnimationFrame(animate);
-
         return (): void => {
             // Unbind the event listener on clean up
             cancelAnimationFrame(animationRef.current as number);
         };
-    });
+    }, [asteroid, animate]);
 
     const asteroidStyle = {
-        top: asteroidState.top,
-        left: asteroidState.left,
-        visibility: asteroidState.destroyed ? "hidden" : "visible",
-        transform: "rotate(" + asteroidState.azimut + "deg)",
+        top: asteroid.top,
+        left: asteroid.left,
+        visibility: asteroid.destroyed ? "hidden" : "visible",
+        transform: "rotate(" + asteroid.azimut + "deg)",
     } as CSSProperties;
 
     return (
