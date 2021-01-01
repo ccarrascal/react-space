@@ -93,7 +93,6 @@ const Asteroid = ({index}: any): JSX.Element => {
             const rect1 = laser.getBoundingClientRect();
             const rect2 = asteroidRef.getBoundingClientRect();
 
-
             if ((azimut >= 0 && azimut <= 90) || (azimut >= 180 && azimut <= 270)) {
                 hit = lineRect(rect1.left, rect1.top, rect1.right, rect1.bottom, rect2.left, rect2.top, rect2.width, rect2.height);
             } else {

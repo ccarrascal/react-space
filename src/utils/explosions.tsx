@@ -3,7 +3,7 @@
 import { setParticles } from "actions";
 import store from "store";
 
-export const explosion = (x: number, y: number) => {
+export const explosion = (x: number, y: number, particles: number = 300) => {
     const ANIMATION_FRAMES = 90;
 
     class Particle {
@@ -28,7 +28,7 @@ export const explosion = (x: number, y: number) => {
 
     // Configuration, Play with these
     const config = {
-        particleNumber: 300,
+        particleNumber: particles,
         maxParticleSize: 3,
         maxSpeed: 40,
         colorVariation: 50
