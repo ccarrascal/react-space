@@ -1,7 +1,12 @@
-import { ADD_SCORE, SET_ASTEROID, SET_BACKGROUND, SET_PARTICLES } from "actions";
+import { ADD_SCORE, SET_ASTEROID, SET_BACKGROUND, SET_GAME_STATE, SET_PARTICLES } from "actions";
 import { AsteroidState } from "components/Asteroid/Asteroid";
 
+export const GAME_STATE_READY = 0;
+export const GAME_STATE_GAME = 1;
+export const GAME_STATE_END = 2;
+
 interface AppState {
+    gameState: number;
     score: number;
     background: ImageData | null; // Original background to use in animation frames.
     particles: any[];  // Explosions particles.
@@ -9,6 +14,7 @@ interface AppState {
 }
 
 const initialState: AppState = {
+    gameState: GAME_STATE_READY,
     score: 0,
     background: null,
     particles: [],
@@ -31,6 +37,10 @@ function rootReducer(state = initialState, action: any) {
         break;
         case SET_ASTEROID:
             state.asteroids[action.index] = {...action.asteroid};
+        break;
+        case SET_GAME_STATE:
+            state.gameState = action.state;
+            state = {...state};
         break;
     }
     return state;

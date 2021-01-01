@@ -3,6 +3,9 @@ import style from "./style.module.scss";
 import classnames from "classnames";
 import { rectRect } from "utils/collisions";
 import { explosion } from "utils";
+import store from "store";
+import { setGameState } from "actions";
+import { GAME_STATE_END } from "reducers";
 
 interface ShipState {
     azimut: number;
@@ -88,21 +91,26 @@ const Ship = React.forwardRef((props, ref: ForwardedRef<HTMLDivElement>) => {
             }
 
             checkCollision();
-            if (shipState.destroyed === false) {
-                if (checkIfImpact(shipRef.current)) {
-                    setShipState((previous) => {
-                        previous.destroyed = true;
-                        return previous;
-                    });
-                    explosion(shipState.left, shipState.top, 1000);
-                }
-            }
+            checkDestroyed();
         }
 
         setShipState(previous => ({...shipState}));
         animationRef.current = requestAnimationFrame(updatePosition);
     }
     
+    // Check if ship is destroyed and end game.
+    const checkDestroyed = ():void => {
+        if (shipState.destroyed === false) {
+            if (checkIfImpact(shipRef.current)) {
+                setShipState((previous) => {
+                    previous.destroyed = true;
+                    return previous;
+                });
+                explosion(shipState.left, shipState.top, 1500);
+            }
+        }
+    }
+
     // Check collision with enemies.
     const checkIfImpact = (shipRef: any): boolean => {
         const enemies = document.getElementById("enemies")?.getElementsByTagName('div');
