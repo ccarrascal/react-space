@@ -162,7 +162,7 @@ const Ship = React.forwardRef((props, ref: ForwardedRef<HTMLDivElement>) => {
 
     // Fire!
     const fire = (): void => {
-        if (!shipState.laser && shipState.laserRecharge === 0) {
+        if (!shipState.laser && shipState.laserRecharge === 0 && shipState.destroyed === false) {
             setShipState((previous) => {
                 previous.laser = true;
                 return previous;
