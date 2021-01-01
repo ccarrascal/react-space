@@ -22,6 +22,6 @@ export const setParticles = (particles: any[]) => {
     return { type: SET_PARTICLES, particles }
 }
 
-export const setAsteroid = (asteroid: AsteroidState) => {
-    return { type: SET_ASTEROID, asteroid };
+export const setAsteroid = (asteroid: AsteroidState, index: number) => {
+    return { type: SET_ASTEROID, asteroid, index };
 }

@@ -11,7 +11,11 @@ const ConnectedEnemies = ({score}: any): JSX.Element => {
 
     return (
         <div className={style.enemies}>
-            <Asteroid />
+            <Asteroid index={0} />
+            {score >= 5  && (<Asteroid index={1} />)}
+            {score >= 10 && (<Asteroid index={2} />)}
+            {score >= 15 && (<Asteroid index={3} />)}
+            {score >= 20 && (<Asteroid index={4} />)}
         </div>
     )
 }

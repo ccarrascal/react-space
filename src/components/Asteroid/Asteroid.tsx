@@ -21,7 +21,7 @@ const ORIGIN_LEFT = 4;
 
 const SPEED = 2;
 
-const Asteroid = (): JSX.Element => {
+const Asteroid = ({index}: any): JSX.Element => {
 
     const initialAsteroidState: AsteroidState | null = {
         vX: 0,
@@ -124,12 +124,12 @@ const Asteroid = (): JSX.Element => {
             }
         }
 
-        store.dispatch(setAsteroid(asteroid));
+        store.dispatch(setAsteroid(asteroid, index));
         animationRef.current = requestAnimationFrame(animate);
     }, []);
 
-    var asteroid = useSelector((state: { asteroids: any; }): any => state.asteroids);
-    asteroid = asteroid === null ? initialAsteroidState : asteroid;
+    var asteroid = useSelector((state: { asteroids: any; }): any => state.asteroids[index]);
+    asteroid = !asteroid ? initialAsteroidState : asteroid;
     const animationRef: MutableRefObject<number|undefined> = useRef();
     const asteroidRef: MutableRefObject<null> = useRef(null);
 

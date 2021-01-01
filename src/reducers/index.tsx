@@ -5,14 +5,14 @@ interface AppState {
     score: number;
     background: ImageData | null; // Original background to use in animation frames.
     particles: any[];  // Explosions particles.
-    asteroids: AsteroidState | null; // Asteroids state.
+    asteroids: AsteroidState[]; // Asteroids state.
 }
 
 const initialState: AppState = {
     score: 0,
     background: null,
     particles: [],
-    asteroids: null,
+    asteroids: [],
 };
 
 function rootReducer(state = initialState, action: any) {
@@ -30,7 +30,7 @@ function rootReducer(state = initialState, action: any) {
             state = {...state};
         break;
         case SET_ASTEROID:
-            state.asteroids = {...action.asteroid};
+            state.asteroids[action.index] = {...action.asteroid};
         break;
     }
     return state;
