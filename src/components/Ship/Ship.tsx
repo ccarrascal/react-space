@@ -1,6 +1,8 @@
-import React, { ForwardedRef, MutableRefObject, useEffect, useRef, useState } from "react";
+import React, { CSSProperties, ForwardedRef, MutableRefObject, useEffect, useRef, useState } from "react";
 import style from "./style.module.scss";
 import classnames from "classnames";
+import { rectRect } from "utils/collisions";
+import { explosion } from "utils";
 
 interface ShipState {
     azimut: number;
@@ -13,6 +15,7 @@ interface ShipState {
     laser: boolean;
     laserTime: number;
     laserRecharge: number;
+    destroyed: boolean;
 }
 
 const TURN_LEFT = -1;
@@ -40,6 +43,7 @@ const Ship = React.forwardRef((props, ref: ForwardedRef<HTMLDivElement>) => {
         laser: false,
         laserTime: LASER_TIME,
         laserRecharge: 0,
+        destroyed: false,
     }
 
     const screenRef = (ref as MutableRefObject<HTMLDivElement>).current;
@@ -84,12 +88,44 @@ const Ship = React.forwardRef((props, ref: ForwardedRef<HTMLDivElement>) => {
             }
 
             checkCollision();
+            if (shipState.destroyed === false) {
+                if (checkIfImpact(shipRef.current)) {
+                    setShipState((previous) => {
+                        previous.destroyed = true;
+                        return previous;
+                    });
+                    explosion(shipState.left, shipState.top, 1000);
+                }
+            }
         }
 
         setShipState(previous => ({...shipState}));
         animationRef.current = requestAnimationFrame(updatePosition);
     }
     
+    // Check collision with enemies.
+    const checkIfImpact = (shipRef: any): boolean => {
+        const enemies = document.getElementById("enemies")?.getElementsByTagName('div');
+        
+        if (enemies && shipRef) {
+            const rect1 = shipRef.getBoundingClientRect();
+            const list = Array.from(enemies);
+
+            for (let x = 0; x < list.length; x++) {
+                const rect2 = list[x].getBoundingClientRect();
+
+                const hit = rectRect(
+                    rect1.left, rect1.top, rect1.width, rect1.height,
+                    rect2.left, rect2.top, rect2.width, rect2.height
+                    );
+                if (hit) return true;
+            }
+        }
+
+        return false;
+    };
+
+    // Check collision with screen borders.
     const checkCollision = () => {
         if (shipState.left < 0) {
             shipState.vX = collision(shipState.vX);
@@ -109,10 +145,12 @@ const Ship = React.forwardRef((props, ref: ForwardedRef<HTMLDivElement>) => {
         }
     }
 
+    // Reduce speed when colliding with screen borders.
     const collision = (number: number): number => {
         return number * -1 * COLLISION_BUMP;
     }
 
+    // Thrust!
     const engageThruster = (power: boolean): void => {
         if (shipState.thrust !== power) {
             setShipState((previous) => {
@@ -122,8 +160,9 @@ const Ship = React.forwardRef((props, ref: ForwardedRef<HTMLDivElement>) => {
         }
     }
 
+    // Fire!
     const fire = (): void => {
-        if (!shipState.laser && shipState.laserRecharge === 0) {
+        if (!shipState.laser && shipState.laserRecharge === 0 && shipState.destroyed === false) {
             setShipState((previous) => {
                 previous.laser = true;
                 return previous;
@@ -131,6 +170,7 @@ const Ship = React.forwardRef((props, ref: ForwardedRef<HTMLDivElement>) => {
         }
     }
 
+    // Turn
     const turnShip = (direction: number): void => {
         if (shipState.turn !== direction) {
             setShipState((previous) => {
@@ -188,7 +228,8 @@ const Ship = React.forwardRef((props, ref: ForwardedRef<HTMLDivElement>) => {
         transform: "rotate(" + shipState.azimut + "deg)",
         top: shipState.top,
         left: shipState.left,
-    };
+        visibility: shipState.destroyed ? "hidden" : "visible",
+    } as CSSProperties;
 
     return (
         <div className={style.shipContainer}>

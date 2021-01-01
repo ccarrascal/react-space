@@ -10,7 +10,7 @@ const mapStateToProps = (state: any): any => {
 const ConnectedEnemies = ({score}: any): JSX.Element => {
 
     return (
-        <div className={style.enemies}>
+        <div id={"enemies"} className={style.enemies}>
             <Asteroid index={0} />
             {score >= 5  && (<Asteroid index={1} />)}
             {score >= 10 && (<Asteroid index={2} />)}
