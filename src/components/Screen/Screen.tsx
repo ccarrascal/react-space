@@ -8,9 +8,10 @@ import { connect } from "react-redux";
 import { GAME_STATE_END, GAME_STATE_GAME, GAME_STATE_READY } from "reducers";
 import { ScreenTitles } from "components/ScreenTitles";
 
-const STAR_COUNT = 6000;
+const STAR_COUNT = 10000;
 
-const drawStars = (total: number, canvas: HTMLCanvasElement | null) => {
+// Draw the stars in the background or take them from game state.
+const drawStars = (total: number, canvas: HTMLCanvasElement | null, redraw: boolean = false) => {
     const context = canvas && canvas.getContext("2d");
     const background = store.getState().background;
 
@@ -19,7 +20,7 @@ const drawStars = (total: number, canvas: HTMLCanvasElement | null) => {
     canvas.width = document.body.clientWidth;
     canvas.height = document.body.clientHeight;
 
-    if (background === null) {
+    if (background === null || redraw === true) {
         for (let x=0; x <= total; x++) {
             const star = {
                 x: Math.random() * canvas.width,
@@ -46,10 +47,14 @@ const ConnectedScreen = ({gameState}: any) => {
 
     useEffect(() => {
         const resizeWindow = () => {
+            drawStars(STAR_COUNT, canvasRef.current, true);
+        }
+
+        const initBackground = () => {
             drawStars(STAR_COUNT, canvasRef.current);
         }
 
-        resizeWindow();
+        initBackground();
         window.addEventListener("resize", resizeWindow);
         return () => window.removeEventListener("resize", resizeWindow);
 
