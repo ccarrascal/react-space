@@ -107,6 +107,9 @@ const Ship = React.forwardRef((props, ref: ForwardedRef<HTMLDivElement>) => {
                     return previous;
                 });
                 explosion(shipState.left, shipState.top, 1500);
+                setTimeout(() => {
+                    store.dispatch(setGameState(GAME_STATE_END));
+                }, 2100);
             }
         }
     }

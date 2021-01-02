@@ -1,20 +1,23 @@
 import { setGameState } from "actions";
 import classnames from "classnames";
 import { useEffect, useState } from "react";
-import { GAME_STATE_GAME } from "reducers";
+import { GAME_STATE_GAME, GAME_STATE_READY } from "reducers";
 import style from "./style.module.scss";
 import store from "store";
 
-const ScreenReady = (): JSX.Element => {
+const ScreenReady = ({...props}: any): JSX.Element => {
 
     const [start, setStart] = useState(false);
+    const title = props?.end ? "GAME OVER" : "Ready Player One";
+    const message = props?.end ? "Press any key" : "Press any key to start";
 
     const pressAnyKey = () => {
         
         if (!start) {
             setStart(true);
+            const newState = props?.end ? GAME_STATE_READY : GAME_STATE_GAME;
             setTimeout(() => {
-                store.dispatch(setGameState(GAME_STATE_GAME));
+                store.dispatch(setGameState(newState));
             }, 1100);
         }
     };
@@ -31,8 +34,8 @@ const ScreenReady = (): JSX.Element => {
 
     return (
         <div className={classnames(style.screenReady, start ? style.hidden : style.visible)}>
-            <h2 className={style.glitch} data-text="Ready Player One">Ready Player One</h2>
-            <h3 className={style.glitch} data-text="Press any key to start">Press any key to start</h3>
+            <h2 className={style.glitch} data-text={title}>{title}</h2>
+            <h3 className={style.glitch} data-text={message}>{message}</h3>
         </div>
     )
 }

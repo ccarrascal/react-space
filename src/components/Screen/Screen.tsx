@@ -5,8 +5,8 @@ import React, { useEffect } from "react";
 import store from "store";
 import style from "./style.module.scss";
 import { connect } from "react-redux";
-import { GAME_STATE_GAME, GAME_STATE_READY } from "reducers";
-import { ScreenReady } from "components/ScreenReady";
+import { GAME_STATE_END, GAME_STATE_GAME, GAME_STATE_READY } from "reducers";
+import { ScreenTitles } from "components/ScreenTitles";
 
 const STAR_COUNT = 6000;
 
@@ -56,10 +56,12 @@ const ConnectedScreen = ({gameState}: any) => {
     }, [canvasRef]);
 
     let content;
+    let theEnd;
     switch (gameState) {
         case GAME_STATE_READY:
-            content = <ScreenReady />
+            content = <ScreenTitles end={false} />
         break;
+        case GAME_STATE_END:
         case GAME_STATE_GAME:
             content = (
                 <div>
@@ -70,10 +72,15 @@ const ConnectedScreen = ({gameState}: any) => {
         break;
     }
 
+    if (gameState === GAME_STATE_END ) {
+        theEnd = (<ScreenTitles end={true} />);
+    }
+
     return (
         <div ref={shipRef} className={style.screen} id="Screen">
             <canvas id={"canvas"} ref={canvasRef} className={style.background} />
             {content}
+            {theEnd}
         </div>
     )
 }
