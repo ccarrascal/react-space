@@ -1,11 +1,11 @@
-import { setGameState } from "actions";
+import { resetScore, setGameState } from "actions";
 import classnames from "classnames";
 import { useEffect, useState } from "react";
 import { GAME_STATE_GAME, GAME_STATE_READY } from "reducers";
 import style from "./style.module.scss";
 import store from "store";
 
-const ScreenReady = ({...props}: any): JSX.Element => {
+const ScreenTitles = ({...props}: any): JSX.Element => {
 
     const [start, setStart] = useState(false);
     const title = props?.end ? "GAME OVER" : "Ready Player One";
@@ -18,6 +18,7 @@ const ScreenReady = ({...props}: any): JSX.Element => {
             const newState = props?.end ? GAME_STATE_READY : GAME_STATE_GAME;
             setTimeout(() => {
                 store.dispatch(setGameState(newState));
+                if (newState === GAME_STATE_READY) store.dispatch(resetScore()); 
             }, 1100);
         }
     };
@@ -40,4 +41,4 @@ const ScreenReady = ({...props}: any): JSX.Element => {
     )
 }
 
-export default ScreenReady;
+export default ScreenTitles;

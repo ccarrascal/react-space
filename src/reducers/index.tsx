@@ -1,4 +1,4 @@
-import { ADD_SCORE, SET_ASTEROID, SET_BACKGROUND, SET_GAME_STATE, SET_PARTICLES } from "actions";
+import { ADD_SCORE, RESET_SCORE, SET_ASTEROID, SET_BACKGROUND, SET_GAME_STATE, SET_PARTICLES } from "actions";
 import { AsteroidState } from "components/Asteroid/Asteroid";
 
 export const GAME_STATE_READY = 0;
@@ -25,6 +25,10 @@ function rootReducer(state = initialState, action: any) {
     switch (action.type) {
         case ADD_SCORE:
             state.score++;
+            state = {...state};
+        break;
+        case RESET_SCORE:
+            state.score = 0;
             state = {...state};
         break;
         case SET_BACKGROUND:
