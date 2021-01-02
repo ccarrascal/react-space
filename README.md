@@ -14,11 +14,13 @@ This is a training project to try and do some cool stuff with react:
 - Collision detection with enemies. Taken from http://www.jeffreythompson.org/collision-detection/line-rect.php
 - Graphics from Technology vector created by brgfx https://www.freepik.com/vectors/technology
 - CSS Explosions based in dewanwagan's work: https://codepen.io/deanwagman/pen/EjLBdQ
+- Cool text glitch effects from: https://codepen.io/cipherbeta/pen/YLdVjw
 - Redux to control game states
 
 ## What is this thing?
 
 Move the spaceship along the screen and blast away those bad asteriods.
+And don't get hit!
 
 ## Controls
 

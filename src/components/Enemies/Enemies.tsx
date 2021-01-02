@@ -21,5 +21,4 @@ const ConnectedEnemies = ({score}: any): JSX.Element => {
 }
 const Enemies = connect(mapStateToProps)(ConnectedEnemies);
 
-
 export default Enemies;
