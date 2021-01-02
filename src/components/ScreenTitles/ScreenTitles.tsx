@@ -29,7 +29,6 @@ const ScreenTitles = ({...props}: any): JSX.Element => {
             // Unbind the event listener on clean up
             document.removeEventListener("keydown", keyboardListener);
         };
-
     });
 
     return (
@@ -43,6 +42,7 @@ const ScreenTitles = ({...props}: any): JSX.Element => {
                     Credits & Github repo
                 </a>
             </div>
+            <div className={style.version}>v{process.env.REACT_APP_VERSION}</div>
         </div>
     )
 }
