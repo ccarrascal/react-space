@@ -47,6 +47,16 @@
       }
     }
   }
+
+  .version {
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+    padding: 5px;
+    font-size: 12px;
+    color: white;
+  }
+
   @mixin glitchCopy {
     content: attr(data-text);
     position: absolute;
