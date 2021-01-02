@@ -1,4 +1,4 @@
-.screenReady {
+.screenTitles {
   &.visible {
     opacity: 1;
   }
@@ -17,16 +17,36 @@
   font-family: "Major Mono Display", monospace;
   transition: opacity 1s ease-in-out;
 
-  h2 {
-    font-size: 40px;
-    text-transform: lowercase;
+  .titles {
+    h2 {
+      font-size: 40px;
+      text-transform: lowercase;
+    }
+
+    h3 {
+      font-size: 14px;
+      text-transform: lowercase;
+    }
   }
 
-  h3 {
-    font-size: 14px;
+  .credits {
+    position: absolute;
+    bottom: 30px;
+    font-size: 12px;
     text-transform: lowercase;
-  }
 
+    a {
+      color: white;
+      text-decoration: none;
+      padding: 5px 10px;
+
+      &:hover,
+      &:focus {
+        background-color: white;
+        color: black;
+      }
+    }
+  }
   @mixin glitchCopy {
     content: attr(data-text);
     position: absolute;

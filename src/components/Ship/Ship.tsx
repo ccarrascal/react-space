@@ -39,7 +39,7 @@ const Ship = React.forwardRef((props, ref: ForwardedRef<HTMLDivElement>) => {
         azimut: 0,
         vY: 0,
         vX: 0,
-        top: 400,
+        top: document.body.clientHeight / 2,
         left: document.body.clientWidth / 2,
         thrust: false,
         turn: 0,

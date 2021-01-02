@@ -8,12 +8,11 @@ import store from "store";
 const ScreenTitles = ({...props}: any): JSX.Element => {
 
     const [start, setStart] = useState(false);
-    const title = props?.end ? "GAME OVER" : "Ready Player One";
-    const message = props?.end ? "Press any key" : "Press any key to start";
+    const title = props?.end ? "GAME OVER" : "Player 1 Get Ready";
+    const message = props?.end ? "Press SPACE key" : "Press SPACE key to start";
 
-    const pressAnyKey = () => {
-        
-        if (!start) {
+    const keyboardListener = (event: KeyboardEvent) => {
+        if (!start && event.key === " ") {
             setStart(true);
             const newState = props?.end ? GAME_STATE_READY : GAME_STATE_GAME;
             setTimeout(() => {
@@ -24,19 +23,26 @@ const ScreenTitles = ({...props}: any): JSX.Element => {
     };
 
     useEffect(() => {
-        document.addEventListener("keydown", pressAnyKey);
+        document.addEventListener("keydown", keyboardListener);
 
         return (): void => {
             // Unbind the event listener on clean up
-            document.removeEventListener("keydown", pressAnyKey);
+            document.removeEventListener("keydown", keyboardListener);
         };
 
     });
 
     return (
-        <div className={classnames(style.screenReady, start ? style.hidden : style.visible)}>
-            <h2 className={style.glitch} data-text={title}>{title}</h2>
-            <h3 className={style.glitch} data-text={message}>{message}</h3>
+        <div className={classnames(style.screenTitles, start ? style.hidden : style.visible)}>
+            <div className={style.titles}>
+                <h2 className={style.glitch} data-text={title}>{title}</h2>
+                <h3 className={style.glitch} data-text={message}>{message}</h3>
+            </div>
+            <div className={style.credits}>
+                <a rel="noreferrer" target="_blank" href="https://github.com/ccarrascal/react-space">
+                    Credits & Github repo
+                </a>
+            </div>
         </div>
     )
 }
