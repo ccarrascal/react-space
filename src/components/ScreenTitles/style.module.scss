@@ -28,6 +28,25 @@
       text-transform: lowercase;
     }
   }
+  .controls {
+    position: absolute;
+    left: 40px;
+    bottom: 30px;
+    display: flex;
+    flex-direction: row;
+    .key {
+      margin: 10px;
+      border: 1px solid white;
+      border-radius: 5px;
+      padding: 6px 10px 2px;
+      text-transform: lowercase;
+      font-family: mono;
+
+      &.space {
+        font-family: "Major Mono Display", monospace;
+      }
+    }
+  }
 
   .credits {
     position: absolute;

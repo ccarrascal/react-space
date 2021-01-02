@@ -37,6 +37,14 @@ const ScreenTitles = ({...props}: any): JSX.Element => {
                 <h2 className={style.glitch} data-text={title}>{title}</h2>
                 <h3 className={style.glitch} data-text={message}>{message}</h3>
             </div>
+            {!props?.end && (
+                <div className={style.controls}>
+                    <div className={style.key}>&#8592;</div>
+                    <div className={style.key}>&#8593;</div>
+                    <div className={style.key}>&#8594;</div>
+                    <div className={classnames(style.key, style.space)}>SPACE</div>
+                </div>
+            )}
             <div className={style.credits}>
                 <a rel="noreferrer" target="_blank" href="https://github.com/ccarrascal/react-space">
                     Credits & Github repo

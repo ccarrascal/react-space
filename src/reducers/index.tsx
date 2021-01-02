@@ -29,6 +29,7 @@ function rootReducer(state = initialState, action: any) {
         break;
         case RESET_SCORE:
             state.score = 0;
+            state.asteroids = [];
             state = {...state};
         break;
         case SET_BACKGROUND:
