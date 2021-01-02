@@ -18,6 +18,7 @@ This is a training project to try and do some cool stuff with react:
 - CSS Explosions based in dewanwagan's work: https://codepen.io/deanwagman/pen/EjLBdQ
 - Cool text glitch effects from: https://codepen.io/cipherbeta/pen/YLdVjw
 - Redux to control game states
+- Added Google Analytics. Can be set up in .env file
 
 ## What is this thing?
 
