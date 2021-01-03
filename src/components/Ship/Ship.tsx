@@ -6,6 +6,7 @@ import { explosion } from "utils";
 import store from "store";
 import { setGameState } from "actions";
 import { GAME_STATE_END } from "reducers";
+import ReactGA from "react-ga";
 
 interface ShipState {
     azimut: number;
@@ -109,6 +110,12 @@ const Ship = React.forwardRef((props, ref: ForwardedRef<HTMLDivElement>) => {
                 explosion(shipState.left, shipState.top, 1500);
                 setTimeout(() => {
                     store.dispatch(setGameState(GAME_STATE_END));
+                    ReactGA.event({
+                        category: 'Game',
+                        action: 'Game End',
+                        label: 'Score',
+                        value: store.getState().score,
+                    });
                 }, 2100);
             }
         }
