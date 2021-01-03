@@ -1,8 +1,17 @@
 import { render, screen } from '@testing-library/react';
 import App from './App';
+import { Provider } from 'react-redux';
+import store from 'store/index';
 
-test('renders learn react link', () => {
-  render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+HTMLCanvasElement.prototype.getContext = () => { 
+  return null;
+};
+
+test('Renders the App on screen', () => {
+    render(
+        <Provider store={store}>
+            <App />
+        </Provider>);
+    const title1 = screen.getByText(/player 1 get ready/i);
+    expect(title1).toBeInTheDocument();
 });

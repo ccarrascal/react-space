@@ -251,7 +251,7 @@ const Ship = React.forwardRef((props, ref: ForwardedRef<HTMLDivElement>) => {
 
     return (
         <div className={style.shipContainer}>
-            <div id="player1" ref={shipRef} className={style.ship} style={shipStyle}>
+            <div id="player1" ref={shipRef} className={style.ship} style={shipStyle} data-testid="player1">
                 <div className={classnames(style.thrust, shipState.thrust ? style.visible : null)} >
                     <div className={style.flameWrapper}>
                         <div className={classnames(style.flame, style.red)}></div>
